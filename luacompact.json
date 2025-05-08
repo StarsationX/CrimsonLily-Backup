@@ -1,0 +1,5 @@
+{
+    "main": "src/init.lua",
+    "prelude": "",
+    "exclude": ["roblox.yml", "selene.toml"]
+}
