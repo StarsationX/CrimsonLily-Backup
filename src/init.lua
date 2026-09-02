@@ -71,6 +71,13 @@ function ODYSSEY.Timer(interval, func)
     end
 end
 
+function ODYSSEY.SafeLoad(path)
+    local ok, err = pcall(load, path)
+    if not ok then
+        warn("[Crimson Lily] Failed to load ".. path ..": ".. tostring(err))
+    end
+end
+
 function ODYSSEY.InitData(name, value, customPath)
     local path = customPath or ODYSSEY.Data
     if path[name] == nil then
@@ -84,22 +91,18 @@ ODYSSEY.RemoteTamperer = load("src/logic/remote_tamper.lua")
 
 -- logic
 if game.PlaceId ~= 3272915504 then
-    load("src/logic/core.lua")
-
-    load("src/logic/combat.lua")
-    load("src/logic/killaura.lua")
-
-    load("src/logic/teleports.lua")
-    load("src/logic/track.lua")
-    
-    load("src/logic/autofish.lua")
-    load("src/logic/farming.lua")
-    load("src/logic/money.lua")
+    ODYSSEY.SafeLoad("src/logic/core.lua")
+    ODYSSEY.SafeLoad("src/logic/combat.lua")
+    ODYSSEY.SafeLoad("src/logic/killaura.lua")
+    ODYSSEY.SafeLoad("src/logic/teleports.lua")
+    ODYSSEY.SafeLoad("src/logic/track.lua")
+    ODYSSEY.SafeLoad("src/logic/autofish.lua")
+    ODYSSEY.SafeLoad("src/logic/farming.lua")
+    ODYSSEY.SafeLoad("src/logic/money.lua")
 end
 
-load("src/logic/gameplay.lua")
-load("src/ui/init.lua")
-
+ODYSSEY.SafeLoad("src/logic/gameplay.lua")
+ODYSSEY.SafeLoad("src/ui/init.lua")
 -- config saving
 local json = load("src/lib/json.lua")
 

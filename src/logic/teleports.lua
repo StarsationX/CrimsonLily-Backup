@@ -19,6 +19,10 @@ function Teleports.GetRegions()
 		local regionModel = workspace.Map:FindFirstChild(regionName)
 		local unloadedModel = UnloadedIslands:FindFirstChild(regionName)
 
+		-- region not present in this sea/place
+		if not regionModel and not unloadedModel then continue end
+		regionModel = regionModel or unloadedModel
+
 		local regionDescs = regionModel:GetDescendants()
 
 		if unloadedModel then
@@ -80,8 +84,12 @@ function Teleports.TeleportToRegion(place)
 	if not character then return end
 
 	local region = (place.Region and place.Region.Name) or place.Name
-	local regionModel = workspace.Map:FindFirstChild(region)
-	local center = regionModel:FindFirstChild("Center")
+	local regionModel = workspace.Map:FindFirstChild(region) or UnloadedIslands:FindFirstChild(region)
+	local center = regionModel and regionModel:FindFirstChild("Center")
+	if not center then
+		ODYSSEY.SendNotification(nil, "Crimson Lily", "This region is not loaded in this sea.", Color3.new(1, 0, 0))
+		return
+	end
 
 	character:SetPrimaryPartCFrame(center.CFrame)
 	character.HumanoidRootPart.Anchored = true
